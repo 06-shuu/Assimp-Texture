@@ -16,14 +16,19 @@
 #include "ShaderProgram.h"
 #include "Camera.h"
 #include "Model.h" //Assimp loader
+#include "texture.h"
+#include "VAO.h"
+#include "VBO.h"
+#include "IBO.h"
 
 // Global Variables
-const char* APP_TITLE = " Computer Graphics - Lighting - Material";
+const char* APP_TITLE = "Test";
 int gWindowWidth = 1600;
 int gWindowHeight = 1200;
 GLFWwindow* gWindow = NULL;
 bool gWireframe = false;
 
+const std::string skyBoxTex = "res/texture/skyBox1";  
 
 //FPSCamera fpsCamera(glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(1.0, 1.0, 1.0));
 FPSCamera fpsCamera(glm::vec3(0.0f, 3.0f, 10.0f));
@@ -53,17 +58,68 @@ int main()
 		return -1;
 	}
 
+	//skybox (gl_cube_map) vertices 
+	GLfloat skyBoxVertices[] = {
+		//   Coordinates
+		-1.0f, -1.0f,  1.0f,
+		 1.0f, -1.0f,  1.0f,
+		 1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f, -1.0f,
+		-1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f
+	};
+
+	GLuint skyBoxIndices[] = {
+		1, 2, 6,
+		6, 5, 1,
+		0, 4, 7,
+		7, 3, 0,
+		4, 5, 6,
+		6, 7, 4,
+		0, 3, 2,
+		2, 1, 0,
+		0, 1, 5,
+		5, 4, 0,
+		3, 7, 6,
+		6, 2, 3
+	};
+
+
+	// ===================== For the Skybox
+
+	VBO skyBoxVBO;
+	skyBoxVBO.bind();
+	skyBoxVBO.BufferData(sizeof(skyBoxVertices), skyBoxVertices);
+
+	VAO skyBoxVAO;
+	skyBoxVAO.bind();
+	skyBoxVAO.Attribpointer(0, 3, GL_FLOAT, 3 * sizeof(GLfloat), (GLvoid*)0);
+
+	IBO skyBoxIBO;
+	skyBoxIBO.bind();
+	skyBoxIBO.BufferData(sizeof(skyBoxIndices), skyBoxIndices);
+
+	//glBindBuffer(GL_ARRAY_BUFFER, 0); //unbind vbo
+	//glBindVertexArray(0); //unbind vao
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); //unbind ibo
+
+	// ============= call shaders
+
 	//setting shaders
-	ShaderProgram AssimpShader;
-
-	//stbi_set_flip_vertically_on_load(true);
-
-	// configure global opengl state
-	// -----------------------------
-	//glEnable(GL_DEPTH_TEST);
+	ShaderProgram AssimpShader, skyBoxShader;
 
 	AssimpShader.loadShaders("res/shaders/model_loading.vert", "res/shaders/model_loading.frag"); //for assimp
+	skyBoxShader.loadShaders("res/shaders/skyBox.vert", "res/shaders/skyBox.frag");
 
+	////**********************
+	//// TEXTURE
+	//// *********************
+	Textures sbtexture;
+	sbtexture.loadCubemap(skyBoxTex, ".jpg", true); //loading the skybox here
+
+	////**********************
 	double lastTime = glfwGetTime();
 	float angle = 0.0f;
 
@@ -90,16 +146,43 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glm::mat4 model(1.0), view(1.0), projection(1.0);
-
+		projection = glm::perspective(glm::radians(fpsCamera.getFOV()), (float)gWindowWidth / (float)gWindowHeight, 0.1f, 200.0f);
+		view = fpsCamera.getViewMatrix();
 
 		glm::vec3 viewPos;
 		viewPos.x = fpsCamera.getPosition().x;
 		viewPos.y = fpsCamera.getPosition().y;
 		viewPos.z = fpsCamera.getPosition().z;
+		
+		//===================SKYBOX========================
 
+		glDepthFunc(GL_LEQUAL);
+
+		skyBoxShader.use();
+		//view = fpsCamera.getViewMatrix();//*
+		skyBoxShader.setUniform("view", glm::mat4(glm::mat3(fpsCamera.getViewMatrix()))); //camera pos inside the skybox
+		skyBoxShader.setUniform("projection", projection);
+
+		//glBindVertexArray(skyBoxVAO);
+		skyBoxVAO.bind();
+		sbtexture.bind(0);
+
+		skyBoxShader.setUniform(skyBoxShader.getProgram(), "skybox");
+		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+		skyBoxVAO.unbind();
+		//glBindVertexArray(0);
+		sbtexture.unbind(0);
+
+		glDepthFunc(GL_LESS);
+
+		//=============================================
+
+
+
+		//========
 		AssimpShader.use();
-		projection = glm::perspective(glm::radians(fpsCamera.getFOV()), (float)gWindowWidth / (float)gWindowHeight, 0.1f, 200.0f);
-		view = fpsCamera.getViewMatrix();
+		//projection = glm::perspective(glm::radians(fpsCamera.getFOV()), (float)gWindowWidth / (float)gWindowHeight, 0.1f, 200.0f);
+		//view = fpsCamera.getViewMatrix();
 		AssimpShader.setUniform("projection", projection);
 		AssimpShader.setUniform("view", view);
 

@@ -24,12 +24,6 @@
     <ClCompile Include="src\Mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\solarsystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -37,6 +31,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VAO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VBO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\IBO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,9 +62,40 @@
     <ClInclude Include="src\Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\VAO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VBO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\IBO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\model_loading.frag" />
     <None Include="res\shaders\model_loading.vert" />
+    <None Include="res\shaders\skyBox.frag" />
+    <None Include="res\shaders\skyBox.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\texture\skyBox\back.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\texture\skyBox\bottom.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\texture\skyBox\front.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\texture\skyBox\left.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\texture\skyBox\right.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\texture\skyBox\top.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

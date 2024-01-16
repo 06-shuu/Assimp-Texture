@@ -21,21 +21,38 @@
   <ItemGroup>
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\glad.c" />
+    <ClCompile Include="src\IBO.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\Model.cpp" />
     <ClCompile Include="src\ShaderProgram.cpp" />
+    <ClCompile Include="src\texture.cpp" />
+    <ClCompile Include="src\VAO.cpp" />
+    <ClCompile Include="src\VBO.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\IBO.h" />
     <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\Model.h" />
     <ClInclude Include="src\ShaderProgram.h" />
     <ClInclude Include="src\texture.h" />
+    <ClInclude Include="src\VAO.h" />
+    <ClInclude Include="src\VBO.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\model_loading.frag" />
     <None Include="res\shaders\model_loading.vert" />
+    <None Include="res\shaders\skyBox.frag" />
+    <None Include="res\shaders\skyBox.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\texture\skyBox\back.jpg" />
+    <Image Include="res\texture\skyBox\bottom.jpg" />
+    <Image Include="res\texture\skyBox\front.jpg" />
+    <Image Include="res\texture\skyBox\left.jpg" />
+    <Image Include="res\texture\skyBox\right.jpg" />
+    <Image Include="res\texture\skyBox\top.jpg" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
